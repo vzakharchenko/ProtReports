@@ -13,20 +13,21 @@ import java.util.Properties;
  * Time: 21:27
  */
 public class Config {
-    private static final String CURRENT_FILE_NAME = "KVT.config";
+    private static final String CURRENT_FILE_NAME = ".config";
     private static Properties properties;
     private static File configFile;
 
     static {
         properties = new Properties();
+        File currentDir = null;
         try {
-            File currentDir = new File(Config.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-            configFile = new File(currentDir, CURRENT_FILE_NAME);
+            currentDir = new File(Config.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            configFile = new File(currentDir + CURRENT_FILE_NAME);
             if (!configFile.exists()) {
                 configFile.createNewFile();
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("" + currentDir, e);
         }
     }
 
