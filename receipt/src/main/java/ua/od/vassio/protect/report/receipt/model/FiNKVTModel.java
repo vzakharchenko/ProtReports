@@ -38,8 +38,8 @@ public class FiNKVTModel extends AbstractReceiptModel<DECLAR> {
     }
 
 
-    public boolean isXml() {
-        return StringUtils.startsWith(message, "<?xml");
+    public boolean isXml(String text) {
+        return StringUtils.startsWith(text, "<?xml");
     }
 
 
@@ -55,7 +55,7 @@ public class FiNKVTModel extends AbstractReceiptModel<DECLAR> {
 
     @Override
     public String getResponseAsString() {
-        if (isXml()) {
+        if (isXml(message)) {
             DECLAR declar = getResponseXml();
             return buildString(declar);
         } else {
@@ -99,6 +99,6 @@ public class FiNKVTModel extends AbstractReceiptModel<DECLAR> {
     }
 
     public void setMessage(String message) {
-        this.message = isXml() ? message.substring(0, message.lastIndexOf('>') + 1) : message;
+        this.message = isXml(message) ? message.substring(0, message.lastIndexOf('>') + 1) : message;
     }
 }
