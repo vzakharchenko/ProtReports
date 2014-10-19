@@ -6,7 +6,7 @@ package ua.od.vassio.protect.report.receipt.model;
  * Date: 18.10.14
  * Time: 23:43
  */
-public class MessageModel extends AbstractReceiptModel implements ReceiptModel<String> {
+public class MessageModel extends AbstractReceiptModel<String> {
 
     private String message;
 

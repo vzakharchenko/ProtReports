@@ -1,0 +1,68 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified"
+           elementFormDefault="qualified">
+    <xs:element name="DECLAR">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="DECLARHEAD">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element type="xs:int" name="TIN"/>
+                            <xs:element type="xs:string" name="C_DOC"/>
+                            <xs:element type="xs:short" name="C_DOC_SUB"/>
+                            <xs:element type="xs:byte" name="C_DOC_VER"/>
+                            <xs:element type="xs:byte" name="C_DOC_TYPE"/>
+                            <xs:element type="xs:byte" name="C_DOC_CNT"/>
+                            <xs:element type="xs:byte" name="C_REG"/>
+                            <xs:element type="xs:byte" name="C_RAJ"/>
+                            <xs:element type="xs:byte" name="PERIOD_MONTH"/>
+                            <xs:element type="xs:byte" name="PERIOD_TYPE"/>
+                            <xs:element type="xs:short" name="PERIOD_YEAR"/>
+                            <xs:element type="xs:short" name="C_STI_ORIG"/>
+                            <xs:element type="xs:byte" name="C_DOC_STAN"/>
+                            <xs:element type="xs:string" name="LINKED_DOCS" nillable="true"/>
+                            <xs:element type="xs:int" name="D_FILL"/>
+                            <xs:element type="xs:string" name="SOFTWARE" nillable="true"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="DECLARBODY">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element type="xs:int" name="HTIN"/>
+                            <xs:element type="xs:string" name="HNAME"/>
+                            <xs:element type="xs:string" name="HEMAIL"/>
+                            <xs:element type="xs:string" name="HDOCKOD"/>
+                            <xs:element type="xs:string" name="HDOCNAME"/>
+                            <xs:element type="xs:string" name="HFILENAME"/>
+                            <xs:element type="xs:string" name="HDOCSTAN"/>
+                            <xs:element type="xs:string" name="HPERIOD"/>
+                            <xs:element type="xs:short" name="HZY"/>
+                            <xs:element type="xs:string" name="HDTERM" nillable="true"/>
+                            <xs:element type="xs:string" name="HTIN1" nillable="true"/>
+                            <xs:element type="xs:string" name="HNAME1" nillable="true"/>
+                            <xs:element type="xs:int" name="HKBOS"/>
+                            <xs:element type="xs:string" name="HBOS"/>
+                            <xs:element type="xs:string" name="HKBUH" nillable="true"/>
+                            <xs:element type="xs:string" name="HBUH" nillable="true"/>
+                            <xs:element type="xs:string" name="HRESULT"/>
+                            <xs:element type="xs:int" name="HDATE"/>
+                            <xs:element type="xs:time" name="HTIME"/>
+                            <xs:element type="xs:string" name="HNUMREG" nillable="true"/>
+                            <xs:element name="T1RXXXXG1S" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute type="xs:byte" name="ROWNUM" use="optional"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element type="xs:string" name="HSENDER"/>
+                            <xs:element type="xs:string" name="TEXT"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

@@ -6,6 +6,7 @@ package ua.od.vassio.protect.report.core.helper;
  * Date: 18.10.14
  * Time: 19:13
  */
+
 /**
  * Knuth-Morris-Pratt Algorithm for Pattern Matching
  */
@@ -23,7 +24,9 @@ public class KMPMatchHelper {
             while (j > 0 && pattern[j] != data[i]) {
                 j = failure[j - 1];
             }
-            if (pattern[j] == data[i]) { j++; }
+            if (pattern[j] == data[i]) {
+                j++;
+            }
             if (j == pattern.length) {
                 return i - pattern.length + 1;
             }

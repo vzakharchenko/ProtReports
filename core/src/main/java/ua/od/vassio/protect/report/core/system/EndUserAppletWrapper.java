@@ -19,9 +19,9 @@ public class EndUserAppletWrapper {
         return (EndUserLibrary) library.get(endUserApplet);
     }
 
-    public static void setEndUserLibrary(EndUserApplet endUserApplet,EndUserLibrary endUserLibrary)throws Exception {
+    public static void setEndUserLibrary(EndUserApplet endUserApplet, EndUserLibrary endUserLibrary) throws Exception {
         Field library = EndUserApplet.class.getDeclaredField("library");
         library.setAccessible(true);
-        library.set(endUserApplet,endUserLibrary);
+        library.set(endUserApplet, endUserLibrary);
     }
 }

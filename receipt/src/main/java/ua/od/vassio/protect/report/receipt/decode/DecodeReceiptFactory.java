@@ -9,6 +9,8 @@ import ua.od.vassio.protect.report.core.system.InternalTyped;
 import ua.od.vassio.protect.report.receipt.decode.part.RawDecodePart;
 import ua.od.vassio.protect.report.receipt.decode.part.SignDecodePart;
 import ua.od.vassio.protect.report.receipt.encode.part.EncodeReceiptPart;
+import ua.od.vassio.protect.report.receipt.exception.DecodeReadException;
+import ua.od.vassio.protect.report.receipt.exception.ReceiptReadException;
 
 import java.util.Arrays;
 
@@ -20,31 +22,31 @@ import java.util.Arrays;
  */
 public class DecodeReceiptFactory {
 
-    public static DecodeReceipt decodeReceipt(EncodeReceiptPart encodeReceiptPart,String charset, Key key) throws UnProtectIITException {
-      byte[] cryptData=  encodeReceiptPart.getEncodeData();
-        byte[] decryptData= key.unprotect(cryptData);
-      byte[] startData= Arrays.copyOf(decryptData, InternalTyped.UA1_SIGN.length);
-      if (!ArrayUtils.isEquals(startData, InternalTyped.UA1_SIGN)) {
-          throw new IllegalArgumentException("Read error");
-      }
+    public static DecodeReceipt decodeReceipt(EncodeReceiptPart encodeReceiptPart, String charset, Key key) throws UnProtectIITException, ReceiptReadException {
+        byte[] cryptData = encodeReceiptPart.getEncodeData();
+        byte[] decryptData = key.unprotect(cryptData);
+        byte[] startData = Arrays.copyOf(decryptData, InternalTyped.UA1_SIGN.length);
+        if (!ArrayUtils.isEquals(startData, InternalTyped.UA1_SIGN)) {
+            throw new DecodeReadException("Read error");
+        }
 
-        SignDecodePart signDecodePart=getSignDecodePart(decryptData);
-        RawDecodePart rawDecodePart=getXmlDecodePart(charset,signDecodePart, decryptData);
-        return new DecodeReceipt(signDecodePart,rawDecodePart);
+        SignDecodePart signDecodePart = getSignDecodePart(decryptData);
+        RawDecodePart rawDecodePart = getXmlDecodePart(charset, signDecodePart, decryptData);
+        return new DecodeReceipt(signDecodePart, rawDecodePart);
     }
 
-    private static SignDecodePart getSignDecodePart(byte[] decryptData){
-        int startPos= InternalTyped.UA1_SIGN.length;
-        int endPos=startPos+InternalTyped.SIGN_LENGTH;
-        byte[] decodeBody= Arrays.copyOf(decryptData, InternalTyped.UA1_SIGN.length);
-        return new SignDecodePart(startPos,InternalTyped.SIGN_LENGTH,endPos,decodeBody);
+    private static SignDecodePart getSignDecodePart(byte[] decryptData) {
+        int startPos = InternalTyped.UA1_SIGN.length;
+        int endPos = startPos + InternalTyped.SIGN_LENGTH;
+        byte[] decodeBody = Arrays.copyOf(decryptData, InternalTyped.UA1_SIGN.length);
+        return new SignDecodePart(startPos, InternalTyped.SIGN_LENGTH, endPos, decodeBody);
     }
 
-    private static RawDecodePart getXmlDecodePart(String charset,SignDecodePart signDecodePart,byte[] decryptData){
-        int startPos= signDecodePart.end();
-        int endPos= KMPMatchHelper.indexOf(decryptData,InternalTyped.END_MESSAGE);
-        byte[] body=Arrays.copyOfRange(decryptData,startPos,endPos);
-       String hex=IITEncodeHelper.getStringFromBytes(body,charset);
-        return new RawDecodePart(startPos,endPos-startPos,endPos,hex);
+    private static RawDecodePart getXmlDecodePart(String charset, SignDecodePart signDecodePart, byte[] decryptData) {
+        int startPos = signDecodePart.end();
+        int endPos = KMPMatchHelper.indexOf(decryptData, InternalTyped.END_MESSAGE);
+        byte[] body = Arrays.copyOfRange(decryptData, startPos, endPos);
+        String hex = IITEncodeHelper.getStringFromBytes(body, charset);
+        return new RawDecodePart(startPos, endPos - startPos, endPos, hex);
     }
 }

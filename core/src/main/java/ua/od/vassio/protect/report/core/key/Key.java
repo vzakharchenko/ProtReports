@@ -12,6 +12,6 @@ import ua.od.vassio.protect.report.core.system.UserInfo;
 public interface Key {
     public UserInfo getUserInfo();
 
-    public byte[]  unprotect(byte[] bytes) throws UnProtectIITException;
+    public byte[] unprotect(byte[] bytes) throws UnProtectIITException;
 
 }

@@ -13,16 +13,15 @@ import ua.od.vassio.protect.report.core.system.UserInfo;
  */
 public class IITKey implements Key {
     private static IITHelper iitHelper;
-
-    protected static void setIitHelper(IITHelper iitHelper) {
-        iitHelper = iitHelper;
-    }
-
     private UserInfo userInfo;
 
     public IITKey(UserInfo userInfo) throws IITException {
         this.userInfo = userInfo;
         iitHelper = IITHelper.getInstance();
+    }
+
+    protected static void setIitHelper(IITHelper iitHelper) {
+        iitHelper = iitHelper;
     }
 
     @Override
@@ -31,7 +30,7 @@ public class IITKey implements Key {
     }
 
     @Override
-    public byte[]  unprotect(byte[] bytes) throws UnProtectIITException {
+    public byte[] unprotect(byte[] bytes) throws UnProtectIITException {
         return iitHelper.unprotect(bytes);
     }
 }

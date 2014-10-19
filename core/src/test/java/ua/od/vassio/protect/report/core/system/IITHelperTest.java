@@ -19,8 +19,8 @@ public class IITHelperTest {
 
     @Test(enabled = false)
     public void testInitialize() throws Exception {
-        String path= EndUserResourceExtractor.GetInstallPath();
-        if (new File(path).exists()){
+        String path = EndUserResourceExtractor.GetInstallPath();
+        if (new File(path).exists()) {
             FileUtils.deleteDirectory(new File(path));
         }
         assertFalse(new File(path).exists());
@@ -31,8 +31,8 @@ public class IITHelperTest {
 
     @Test(enabled = false)
     public void testReinstall() throws Exception {
-        String path="/tmp/testDirecory";
-        if (new File(path).exists()){
+        String path = "/tmp/testDirecory";
+        if (new File(path).exists()) {
             FileUtils.deleteDirectory(new File(path));
         }
         IITHelper.getInstance();

@@ -6,7 +6,8 @@ package ua.od.vassio.protect.report.receipt.model;
  * Date: 19.10.14
  * Time: 0:13
  */
-public abstract class AbstractReceiptModel {
+public abstract class AbstractReceiptModel<TYPE> implements ReceiptModel<TYPE> {
+    //header
     private int docType;
     private String rcv_email;
     private int cncode;

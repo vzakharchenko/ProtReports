@@ -11,13 +11,13 @@ public abstract class RuntimeIITException extends RuntimeException {
     private String message;
 
     public RuntimeIITException(int code, String message) {
-        super("Code: "+code+";Message:"+message);
+        super("Code: " + code + ";Message:" + message);
         this.code = code;
         this.message = message;
     }
 
-    public RuntimeIITException( int code, String message,Throwable cause) {
-        super("Code: "+code+";Message:"+message,cause);
+    public RuntimeIITException(int code, String message, Throwable cause) {
+        super("Code: " + code + ";Message:" + message, cause);
         this.code = code;
         this.message = message;
     }

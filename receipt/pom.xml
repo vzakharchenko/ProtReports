@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>protectReports</artifactId>
@@ -11,11 +11,16 @@
 
     <artifactId>receipt</artifactId>
 
-      <dependencies>
-          <dependency>
-              <groupId>ua.od.vassio.protectReports</groupId>
-              <artifactId>core</artifactId>
-              <version>${version}</version>
-          </dependency>
-      </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>ua.od.vassio.protectReports</groupId>
+            <artifactId>core</artifactId>
+            <version>${version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ua.od.vassio.protectReports</groupId>
+            <artifactId>xsd</artifactId>
+            <version>${version}</version>
+        </dependency>
+    </dependencies>
 </project>
