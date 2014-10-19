@@ -20,6 +20,11 @@ public class MessageModel extends AbstractReceiptModel<String> {
         return getMessage();
     }
 
+    @Override
+    public String getResponseAsString() {
+        return getResponse();
+    }
+
     public String getMessage() {
         return message;
     }

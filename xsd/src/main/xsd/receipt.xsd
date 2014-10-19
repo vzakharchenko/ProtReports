@@ -45,10 +45,10 @@
                             <xs:element type="xs:string" name="HKBUH" nillable="true"/>
                             <xs:element type="xs:string" name="HBUH" nillable="true"/>
                             <xs:element type="xs:string" name="HRESULT"/>
-                            <xs:element type="xs:int" name="HDATE"/>
+                            <xs:element type="xs:string" name="HDATE"/>
                             <xs:element type="xs:time" name="HTIME"/>
                             <xs:element type="xs:string" name="HNUMREG" nillable="true"/>
-                            <xs:element name="T1RXXXXG1S" minOccurs="0">
+                            <xs:element name="T1RXXXXG1S" maxOccurs="unbounded" minOccurs="0">
                                 <xs:complexType>
                                     <xs:simpleContent>
                                         <xs:extension base="xs:string">

@@ -20,6 +20,11 @@ import java.io.File;
  */
 public class ReceiptReader {
 
+    public static ReceiptModel readOnlyEncodePartFile(File kvit) throws UnProtectIITException, ReceiptReadException {
+        EncodeReceipt encodeReceipt = EncodeReceiptFactory.build(kvit);
+        return populate(encodeReceipt, null);
+    }
+
     public static ReceiptModel readReceiptFile(String charset, Key key, File kvit) throws UnProtectIITException, ReceiptReadException {
         EncodeReceipt encodeReceipt = EncodeReceiptFactory.build(kvit);
         DecodeReceipt decodeReceipt = DecodeReceiptFactory.decodeReceipt(encodeReceipt.getEncodeReceiptPart(), charset, key);

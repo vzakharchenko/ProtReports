@@ -11,4 +11,17 @@ public interface ReceiptModel<TYPE> {
 
     public TYPE getResponse();
 
+    public String getResponseAsString();
+
+    public int getDocType();
+
+    public String getRcv_email();
+
+    public int getCncode();
+
+    public int getKvtNUM();
+
+    public int getStType();
+
+    public int getResult();
 }

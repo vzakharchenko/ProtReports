@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>xsd</artifactId>
+    <packaging>jar</packaging>
     <profiles>
         <profile>
             <id>generateReceiptXsd</id>
