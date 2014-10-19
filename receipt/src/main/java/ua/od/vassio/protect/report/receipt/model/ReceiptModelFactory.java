@@ -18,7 +18,7 @@ public class ReceiptModelFactory {
 
     public static ReceiptModel buildFromEncodePart(EncodeReceipt encodeReceipt) {
         AbstractReceiptModel receiptModel;
-        if (isXML(encodeReceipt)) {
+        if (isFinDoc(encodeReceipt)) {
             FiNKVTModel fiNKVTModel = new FiNKVTModel();
             receiptModel = fiNKVTModel;
         } else {
@@ -64,7 +64,7 @@ public class ReceiptModelFactory {
 
         AbstractReceiptModel receiptModel;
         if (decodeReceipt != null) {
-            if (isXML(encodeReceipt)) {
+            if (isFinDoc(encodeReceipt)) {
                 FiNKVTModel fiNKVTModel = new FiNKVTModel();
                 fiNKVTModel.setMessage(decodeReceipt.getRawDecodePart().getMessage());
                 receiptModel = fiNKVTModel;
@@ -81,11 +81,12 @@ public class ReceiptModelFactory {
         return receiptModel;
     }
 
-    private static boolean isXML(EncodeReceipt encodeReceipt) {
-        return isXML(getEncodedValues(encodeReceipt));
+    private static boolean isFinDoc(EncodeReceipt encodeReceipt) {
+        return isFinDoc(getEncodedValues(encodeReceipt));
     }
 
-    private static boolean isXML(Map<String, String> map) {
+
+    private static boolean isFinDoc(Map<String, String> map) {
         return (map.containsKey(HeaderValue.FINKVT.name()) && StringUtils.equals(map.get(HeaderValue.FINKVT.name()), "1"));
     }
 }

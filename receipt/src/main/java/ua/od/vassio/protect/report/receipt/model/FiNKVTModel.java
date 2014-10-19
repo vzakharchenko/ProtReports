@@ -1,6 +1,7 @@
 package ua.od.vassio.protect.report.receipt.model;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import ua.od.vassio.protect.report.receipt.exception.ReceiptReadRuntimeException;
 import ua.od.vassio.protect.report.receipt.xsd.DECLAR;
 
@@ -24,6 +25,9 @@ public class FiNKVTModel extends AbstractReceiptModel<DECLAR> {
 
 
     public static String RECEIPT_XSD_MODEL_PATH="ua.od.vassio.protect.report.receipt.xsd";
+    private static JAXBContext JAXBCONTEXT;
+    private static Unmarshaller UNMARSHALLER;
+    private String message;
     static {
         try {
             JAXBCONTEXT = JAXBContext.newInstance(RECEIPT_XSD_MODEL_PATH);
@@ -33,17 +37,13 @@ public class FiNKVTModel extends AbstractReceiptModel<DECLAR> {
         }
     }
 
-    private static JAXBContext JAXBCONTEXT;
-    private static Unmarshaller UNMARSHALLER;
-    private String message;
 
-    @Override
     public boolean isXml() {
-        return true;
+        return StringUtils.startsWith(message, "<?xml");
     }
 
-    @Override
-    public DECLAR getResponse() {
+
+    public DECLAR getResponseXml() {
         try {
             JAXBElement<DECLAR> declarjaxbElement = UNMARSHALLER.unmarshal(new StreamSource(new ByteArrayInputStream(message.getBytes("windows-1251"))), DECLAR.class);
             return declarjaxbElement.getValue();
@@ -55,8 +55,13 @@ public class FiNKVTModel extends AbstractReceiptModel<DECLAR> {
 
     @Override
     public String getResponseAsString() {
-        DECLAR declar = getResponse();
-        return buildString(declar);
+        if (isXml()) {
+            DECLAR declar = getResponseXml();
+            return buildString(declar);
+        } else {
+            return message;
+        }
+
     }
 
     private String buildString(DECLAR declar) {
@@ -94,6 +99,6 @@ public class FiNKVTModel extends AbstractReceiptModel<DECLAR> {
     }
 
     public void setMessage(String message) {
-        this.message = message.substring(0, message.lastIndexOf('>')+1);
+        this.message = isXml() ? message.substring(0, message.lastIndexOf('>') + 1) : message;
     }
 }

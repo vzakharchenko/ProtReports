@@ -11,18 +11,8 @@ public class MessageModel extends AbstractReceiptModel<String> {
     private String message;
 
     @Override
-    public boolean isXml() {
-        return false;
-    }
-
-    @Override
-    public String getResponse() {
-        return getMessage();
-    }
-
-    @Override
     public String getResponseAsString() {
-        return getResponse();
+        return message;
     }
 
     public String getMessage() {

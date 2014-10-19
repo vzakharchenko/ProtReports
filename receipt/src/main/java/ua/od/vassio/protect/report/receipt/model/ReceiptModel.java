@@ -7,9 +7,6 @@ package ua.od.vassio.protect.report.receipt.model;
  * Time: 0:08
  */
 public interface ReceiptModel<TYPE> {
-    public boolean isXml();
-
-    public TYPE getResponse();
 
     public String getResponseAsString();
 

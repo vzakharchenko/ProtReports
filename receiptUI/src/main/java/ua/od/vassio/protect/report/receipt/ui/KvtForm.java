@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 public class KvtForm extends Component {
     private static KvtForm kvtForm = new KvtForm();
-    private static File defaultFileName;
+    private static String defaultFileName;
     private JPanel kvtPanel;
     private JTextPane message;
     private JLabel rcv_email;
@@ -41,7 +41,7 @@ public class KvtForm extends Component {
     public static void main(String[] args) {
         if (args.length > 0) {
             if (new File(args[0]).exists()) {
-                defaultFileName = new File(args[0]);
+                defaultFileName = new File(args[0]).getAbsolutePath();
             }
         }
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -108,7 +108,7 @@ public class KvtForm extends Component {
 
     protected void init() {
         if (defaultFileName != null) {
-            openFile(defaultFileName);
+            openFile(new File(defaultFileName));
         } else {
             kvtForm.email.setText("");
             kvtForm.kvtNUMValue.setText("");
