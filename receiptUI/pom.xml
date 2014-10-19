@@ -28,11 +28,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2-beta-2</version>
+                <version>2.4</version>
                 <configuration>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <!--<descriptors>-->
+                    <!--<descriptor>src/main/assembly/assembly.xml</descriptor>-->
+                    <!--</descriptors>-->
                     <archive>
                         <index>true</index>
                         <manifest>
@@ -54,12 +57,56 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>ideauidesigner-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>javac2</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <fork>true</fork>
+                    <debug>true</debug>
+                    <failOnError>true</failOnError>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.5</version>
                 <configuration>
                     <archive>
                         <manifest>
+                            <!-- Classpath is added to the manifest of the created jar file. -->
                             <addClasspath>true</addClasspath>
+                            <!--
+                                Configures the classpath prefix. This configuration option is
+                                used to specify that all needed libraries are found under lib/
+                                directory.
+                            -->
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <!-- Specifies the main class of the application -->
                             <mainClass>ua.od.vassio.protect.report.receipt.ui.KvtForm</mainClass>
                         </manifest>
                     </archive>
