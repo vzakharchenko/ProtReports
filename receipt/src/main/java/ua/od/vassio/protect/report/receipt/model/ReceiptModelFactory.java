@@ -1,6 +1,5 @@
 package ua.od.vassio.protect.report.receipt.model;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import ua.od.vassio.protect.report.receipt.HeaderValue;
 import ua.od.vassio.protect.report.receipt.decode.DecodeReceipt;
@@ -17,16 +16,9 @@ import java.util.Map;
 public class ReceiptModelFactory {
 
     public static ReceiptModel buildFromEncodePart(EncodeReceipt encodeReceipt) {
-        AbstractReceiptModel receiptModel;
-        if (isFinDoc(encodeReceipt)) {
-            FiNKVTModel fiNKVTModel = new FiNKVTModel();
-            receiptModel = fiNKVTModel;
-        } else {
-            MessageModel messageModel = new MessageModel();
-            receiptModel = messageModel;
-        }
-        buildFromEncodePart(receiptModel, encodeReceipt);
-        return receiptModel;
+        MessageModel messageModel = new MessageModel();
+        buildFromEncodePart(messageModel, encodeReceipt);
+        return messageModel;
     }
 
     private static void buildFromEncodePart(AbstractReceiptModel receiptModel, EncodeReceipt encodeReceipt) {
@@ -64,15 +56,9 @@ public class ReceiptModelFactory {
 
         AbstractReceiptModel receiptModel;
         if (decodeReceipt != null) {
-            if (isFinDoc(encodeReceipt)) {
-                FiNKVTModel fiNKVTModel = new FiNKVTModel();
-                fiNKVTModel.setMessage(decodeReceipt.getRawDecodePart().getMessage());
-                receiptModel = fiNKVTModel;
-            } else {
-                MessageModel messageModel = new MessageModel();
+            MessageModel messageModel = new MessageModel();
                 messageModel.setMessage(decodeReceipt.getRawDecodePart().getMessage());
                 receiptModel = messageModel;
-            }
         } else {
             receiptModel = new EncMessageModel();
         }
@@ -81,12 +67,5 @@ public class ReceiptModelFactory {
         return receiptModel;
     }
 
-    private static boolean isFinDoc(EncodeReceipt encodeReceipt) {
-        return isFinDoc(getEncodedValues(encodeReceipt));
-    }
 
-
-    private static boolean isFinDoc(Map<String, String> map) {
-        return (map.containsKey(HeaderValue.FINKVT.name()) && StringUtils.equals(map.get(HeaderValue.FINKVT.name()), "1"));
-    }
 }

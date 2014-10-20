@@ -2,6 +2,7 @@ package ua.od.vassio.protect.report.receipt.ui;
 
 import com.iit.certificateAuthority.endUser.libraries.signJava.EndUserResourceExtractor;
 import ua.od.vassio.protect.report.core.exception.IITException;
+import ua.od.vassio.protect.report.core.system.IITHelper;
 import ua.od.vassio.protect.report.core.system.storage.Storage;
 import ua.od.vassio.protect.report.core.system.storage.StorageFactory;
 import ua.od.vassio.protect.report.receipt.ui.config.Config;
@@ -51,6 +52,7 @@ public class ConfigForm implements ActionListener {
     private static void init() {
         configForm.installIITPath.setText(Config.load(Configs.INSTALL_PATH, EndUserResourceExtractor.GetInstallPath()));
         try {
+            IITHelper.getInstance().reInstall(configForm.installIITPath.getText());
             Storage storage = StorageFactory.loadStorage();
             configForm.certPath.setText(Config.load(Configs.CERT_PATH, storage.getFileStorage().getPath()));
         } catch (IITException e) {

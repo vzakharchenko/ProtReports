@@ -27,7 +27,7 @@ public class ReceiptReader {
 
     public static ReceiptModel readReceiptFile(String charset, Key key, File kvit) throws UnProtectIITException, ReceiptReadException {
         EncodeReceipt encodeReceipt = EncodeReceiptFactory.build(kvit);
-        DecodeReceipt decodeReceipt = DecodeReceiptFactory.decodeReceipt(encodeReceipt.getEncodeReceiptPart(), charset, key);
+        DecodeReceipt decodeReceipt = DecodeReceiptFactory.decodeReceipt(encodeReceipt, charset, key);
         return populate(encodeReceipt, decodeReceipt);
     }
 
