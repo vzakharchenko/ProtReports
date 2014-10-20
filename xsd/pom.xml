@@ -11,6 +11,10 @@
 
     <artifactId>xsd</artifactId>
     <packaging>jar</packaging>
+
+    <properties>
+        <main.basedir>${basedir}/..</main.basedir>
+    </properties>
     <profiles>
         <profile>
             <id>generateReceiptXsd</id>

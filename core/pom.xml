@@ -12,7 +12,7 @@
     <artifactId>core</artifactId>
     <packaging>jar</packaging>
 
-    <dependencies>
-
-    </dependencies>
+    <properties>
+        <main.basedir>${basedir}/..</main.basedir>
+    </properties>
 </project>
