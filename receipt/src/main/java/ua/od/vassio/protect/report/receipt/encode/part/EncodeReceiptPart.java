@@ -22,7 +22,7 @@ public class EncodeReceiptPart extends AbstractReceiptPart {
 
     public byte[] getEncodeData() {
         ByteBuffer wrapped = ByteBuffer.wrap(encodeData);
-        Integer size = wrapped.getShort() & 0xffff;
+        Integer size = Short.reverseBytes(wrapped.getShort()) & 0xffff;
         return Arrays.copyOfRange(encodeData, 4, size + 4);// skip 4 bytes (length)
     }
 }

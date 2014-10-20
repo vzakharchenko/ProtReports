@@ -38,6 +38,7 @@ public class KvtForm extends Component {
     private JButton about;
     private JButton unprotect;
     private static JFrame frame = new JFrame("Квитанция");
+
     public static void main(String[] args) {
         if (args.length > 0) {
             if (new File(args[0]).exists()) {
