@@ -10,4 +10,8 @@ public class InternalIITException extends RuntimeIITException {
     public InternalIITException(int code, String message) {
         super(code, message);
     }
+
+    public InternalIITException(int code, String message, Throwable cause) {
+        super(code, message, cause);
+    }
 }

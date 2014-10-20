@@ -1,6 +1,9 @@
 package ua.od.vassio.protect.report.receipt.ui;
 
 import com.iit.certificateAuthority.endUser.libraries.signJava.EndUserResourceExtractor;
+import ua.od.vassio.protect.report.core.exception.IITException;
+import ua.od.vassio.protect.report.core.system.storage.Storage;
+import ua.od.vassio.protect.report.core.system.storage.StorageFactory;
 import ua.od.vassio.protect.report.receipt.ui.config.Config;
 import ua.od.vassio.protect.report.receipt.ui.config.Configs;
 
@@ -47,7 +50,13 @@ public class ConfigForm implements ActionListener {
 
     private static void init() {
         configForm.installIITPath.setText(Config.load(Configs.INSTALL_PATH, EndUserResourceExtractor.GetInstallPath()));
-        configForm.certPath.setText(Config.load(Configs.CERT_PATH, "/data/certificates"));
+        try {
+            Storage storage = StorageFactory.loadStorage();
+            configForm.certPath.setText(Config.load(Configs.CERT_PATH, storage.getFileStorage().getPath()));
+        } catch (IITException e) {
+            throw new RuntimeException(e);
+        }
+
         configForm.codePage.setText(Config.load(Configs.CODEPAGE, "windows-1251"));
         configForm.pkPath.setText(Config.load(Configs.PRIVATEKEY_PATH));
         configForm.password.setText(Config.load(Configs.PRIVATEKEY_PASSWORD));
@@ -62,6 +71,11 @@ public class ConfigForm implements ActionListener {
         Config.save(Configs.CODEPAGE, configForm.codePage.getText());
         Config.save(Configs.PRIVATEKEY_PATH, configForm.pkPath.getText());
         Config.save(Configs.PRIVATEKEY_PASSWORD, new String(configForm.password.getPassword()));
+        try {
+            StorageFactory.saveStorage(StorageFactory.buildDefaultStorage(configForm.certPath.getText()));
+        } catch (IITException e1) {
+            throw new RuntimeException(e1);
+        }
         frame.setVisible(false);
     }
 }

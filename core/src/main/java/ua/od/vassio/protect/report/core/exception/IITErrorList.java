@@ -11,4 +11,5 @@ import com.iit.certificateAuthority.endUser.libraries.signJava.EndUserError;
 public class IITErrorList extends EndUserError {
     public static final int ERROR_INITIALIZE_FAILED = -1;
     public static final int ERROR_INSTALL_FAILED = -2;
+    public static final int ERROR_STORAGE_FAILED = -3;
 }

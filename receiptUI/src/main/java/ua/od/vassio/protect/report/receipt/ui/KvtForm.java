@@ -37,7 +37,7 @@ public class KvtForm extends Component {
     private JButton config;
     private JButton about;
     private JButton unprotect;
-
+    private static JFrame frame = new JFrame("Квитанция");
     public static void main(String[] args) {
         if (args.length > 0) {
             if (new File(args[0]).exists()) {
@@ -52,7 +52,6 @@ public class KvtForm extends Component {
     }
 
     private static void createAndShowGUI() {
-        JFrame frame = new JFrame("KvtForm");
         frame.setContentPane(kvtForm.kvtPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -87,7 +86,7 @@ public class KvtForm extends Component {
             return useKey;
         } catch (Exception ex) {
             showErrorPane("error", ex.getMessage());
-            throw new RuntimeException(ex);
+            return false;
         }
     }
 
