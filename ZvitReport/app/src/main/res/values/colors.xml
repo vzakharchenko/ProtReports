@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="systemName">#FF0061FF</color>
+    <color name="lastStageFail">#FFFF0300</color>
+    <color name="lastStageSuccess">#FF00FF00</color>
+</resources>
