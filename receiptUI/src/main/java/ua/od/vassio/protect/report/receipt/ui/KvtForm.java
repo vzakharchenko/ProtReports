@@ -1,10 +1,12 @@
 package ua.od.vassio.protect.report.receipt.ui;
 
 import com.iit.certificateAuthority.endUser.libraries.signJava.EndUserResourceExtractor;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import ua.od.vassio.protect.report.core.exception.IITException;
 import ua.od.vassio.protect.report.core.key.Key;
 import ua.od.vassio.protect.report.core.key.KeyFactory;
+import ua.od.vassio.protect.report.core.system.CertificateInfo;
 import ua.od.vassio.protect.report.receipt.ReceiptReader;
 import ua.od.vassio.protect.report.receipt.exception.ReceiptReadException;
 import ua.od.vassio.protect.report.receipt.model.ReceiptModel;
@@ -22,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created with IntelliJ IDEA.
@@ -44,6 +47,7 @@ public class KvtForm extends Component {
     private JButton config;
     private JButton about;
     private JButton unprotect;
+    private JLabel keyInfo;
     private File currentFile;
     private static JFrame frame = new JFrame("Квитанция");
 
@@ -64,6 +68,7 @@ public class KvtForm extends Component {
         frame.setContentPane(kvtForm.kvtPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
+        frame.setSize(600, 400);
         kvtForm.init();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -74,6 +79,7 @@ public class KvtForm extends Component {
         try {
 
             boolean useKey = false;
+
             String keyPath = Config.load(Configs.PRIVATEKEY_PATH);
             ReceiptModel receiptModel;
             if (StringUtils.isEmpty(keyPath) || !new File(keyPath).exists()) {
@@ -123,17 +129,22 @@ public class KvtForm extends Component {
 
     public ReceiptModel decryptFile(final String installPath, final File file, final String keyPath, final String keyPassword) {
         try {
+            boolean nusekey = BooleanUtils.toBoolean(Config.load(Configs.NOT_USE_KEY));
+            if (nusekey) {
+                return null;
+            }
             return DialogMessages.showProgressPane(frame, "Подождите файл открывается", "Подождите файл открывается...", 0, 6, new ProgressRunnable<ReceiptModel>() {
                 @Override
                 protected ReceiptModel executeLogic() {
                     try {
                         increment();
-                        Key key = KeyFactory.openPrivateKey(installPath, new File(keyPath), keyPassword);
+                        Key key = KeyFactory.openPrivateKey(new File(keyPath), keyPassword);
                         increment(3);
                         String codepage = Config.load(Configs.CODEPAGE, "windows-1251");
                         increment(1);
                         ReceiptModel receiptModel = ReceiptReader.readReceiptFile(codepage, key, file);
                         increment(2);
+                        showKeyInfo(key.getUserCertificateInfo());
                         return receiptModel;
                     } catch (IITException e) {
                         e.printStackTrace();
@@ -153,15 +164,69 @@ public class KvtForm extends Component {
 
     }
 
-    protected void init() {
-        if (defaultFileName != null) {
-            openFile(new File(defaultFileName));
-        } else {
-            kvtForm.email.setText("");
-            kvtForm.kvtNUMValue.setText("");
-            kvtForm.ResultValue.setText("");
+    private boolean isInstalled() {
+        keyInfo.setVisible(false);
+        boolean nusekey = BooleanUtils.toBoolean(Config.load(Configs.NOT_USE_KEY));
+        final String keyPath = Config.load(Configs.PRIVATEKEY_PATH);
+        final String password = Config.load(Configs.PRIVATEKEY_PASSWORD);
+        final String installPath = Config.load(Configs.INSTALL_PATH);
+        if (nusekey) {
+            return true;
         }
+        if (StringUtils.isEmpty(keyPath) || StringUtils.isEmpty(installPath)) {
+            return false;
+        }
+        if (StringUtils.isNotEmpty(password)) {
+            try {
+                CertificateInfo certificateInfo = DialogMessages.showProgressPane(frame, "Чтение ключа", "Чтение Ключа...", 0, 4, new ProgressRunnable<CertificateInfo>() {
+                    @Override
+                    protected CertificateInfo executeLogic() {
+                        try {
+                            increment();
+                            Key key = KeyFactory.openPrivateKey(installPath, new File(keyPath), password);
+                            increment(2);
+                            CertificateInfo certificateInfo = key.getUserCertificateInfo();
+                            increment();
+                            return certificateInfo;
+                        } catch (IITException e) {
+                            DialogMessages.showErrorPane("Ошибка чтения ключа", "Ошибка чтения ключа: " + e.getMessage());
+                            return null;
+                        }
+                    }
+                });
+                if (certificateInfo == null) {
+                    return false;
+                }
+                showKeyInfo(certificateInfo);
+            } catch (Exception e) {
+                e.printStackTrace();
+                DialogMessages.showErrorPane("Ошибка чтения ключа", "Ошибка чтения ключа: " + e.getMessage());
+            }
+        }
+        return true;
+    }
 
+
+    private void showKeyInfo(CertificateInfo certificateInfo) {
+        keyInfo.setVisible(true);
+        keyInfo.setText("Действие Сертификата заканчивается через " + TimeUnit.DAYS.convert(certificateInfo.getCertEndTime().getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS) + " дней");
+    }
+
+    protected void init() {
+        config.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setEnabled(false);
+                try {
+                    ConfigForm.showGUI();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    DialogMessages.showErrorPane("Ошибка открытия Параметров", ex.getMessage());
+                } finally {
+                    frame.setEnabled(true);
+                }
+            }
+        });
         open.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -179,20 +244,7 @@ public class KvtForm extends Component {
                 }
             }
         });
-        config.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.setEnabled(false);
-                try {
-                    ConfigForm.showGUI();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    DialogMessages.showErrorPane("Ошибка открытия Параметров", ex.getMessage());
-                } finally {
-                    frame.setEnabled(true);
-                }
-            }
-        });
+
         unprotect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -212,9 +264,16 @@ public class KvtForm extends Component {
                     keyPassword = DialogMessages.showPasswordPane("Пароль к ключу", "Введите пароль к ключу");
                 }
                 if (StringUtils.isEmpty(keyPassword)) {
-
+                    DialogMessages.showWarningPane("Действие отменено", "Действие отменено");
                 } else {
                     try {
+                        boolean nusekey = BooleanUtils.toBoolean(Config.load(Configs.NOT_USE_KEY));
+                        if (nusekey) {
+                            DialogMessages.showWarningPane("Внимание", "Установлен режим без использования приватного ключа!");
+                            config.doClick();
+                            return;
+                        }
+
                         ReceiptModel receiptModel = decryptFile(installPath, currentFile, keyPath, keyPassword);
                         if (receiptModel != null) {
                             showReceiptModel(receiptModel);
@@ -222,7 +281,7 @@ public class KvtForm extends Component {
                         }
 
                     } catch (Exception ex) {
-                        DialogMessages.showErrorPane("error", ex.getMessage());
+                        DialogMessages.showErrorPane("Ошибка", ex.getMessage());
                         return;
                     }
                 }
@@ -234,10 +293,16 @@ public class KvtForm extends Component {
             public void actionPerformed(ActionEvent e) {
                 frame.setEnabled(false);
                 try {
+                    boolean nusekey = BooleanUtils.toBoolean(Config.load(Configs.NOT_USE_KEY));
+                    if (nusekey) {
+                        DialogMessages.showWarningPane("Внимание", "Установлен режим без использования приватного ключа!");
+                        config.doClick();
+                        return;
+                    }
                     AboutKey.showGUI();
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    DialogMessages.showErrorPane("Ошибка открытия О программе", ex.getMessage());
+                    DialogMessages.showErrorPane("Ошибка открытия О ключе", ex.getMessage());
                 } finally {
                     frame.setEnabled(true);
                 }
@@ -259,6 +324,19 @@ public class KvtForm extends Component {
                 }
             }
         });
+
+        if (!isInstalled()) {
+            DialogMessages.showInfoPane("Приложение не установлено!", "Чтобы продолжить Настройте работу программы");
+            config.doClick();
+        }
+        if (defaultFileName != null) {
+            openFile(new File(defaultFileName));
+        } else {
+            kvtForm.email.setText("");
+            kvtForm.kvtNUMValue.setText("");
+            kvtForm.ResultValue.setText("");
+        }
+
     }
 
 

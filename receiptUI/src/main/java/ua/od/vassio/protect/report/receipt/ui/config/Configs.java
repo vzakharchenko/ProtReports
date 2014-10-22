@@ -13,4 +13,5 @@ public interface Configs {
     public static final String PRIVATEKEY_PASSWORD = "PRIVATEKEY_PASSWORD";
     public static final String CODEPAGE = "CODEPAGE";
     public static final String INN = "EDRPO";
+    public static final String NOT_USE_KEY = "NOT_USE_KEY";
 }

@@ -63,7 +63,7 @@ public class AboutKey extends Component implements ActionListener {
                     String installPath = Config.load(Configs.INSTALL_PATH, EndUserResourceExtractor.GetInstallPath());
                     increment();
                     try {
-                        Key key = KeyFactory.openPrivateKey(installPath, new File(Config.load(Configs.PRIVATEKEY_PATH)), finalKeyPassword);
+                        Key key = KeyFactory.openPrivateKey(new File(Config.load(Configs.PRIVATEKEY_PATH)), finalKeyPassword);
                         increment(2);
                         return key;
                     } catch (Exception ex) {

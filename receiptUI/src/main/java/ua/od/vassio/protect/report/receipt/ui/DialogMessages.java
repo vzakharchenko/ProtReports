@@ -18,6 +18,10 @@ public class DialogMessages {
         showPane(title, msg, JOptionPane.INFORMATION_MESSAGE);
     }
 
+    public static void showWarningPane(String title, String msg) {
+        showPane(title, msg, JOptionPane.WARNING_MESSAGE);
+    }
+
     public static void showPane(String title, String msg, int type) {
 
         JOptionPane pane = new JOptionPane(msg, type);

@@ -19,4 +19,10 @@ public class KeyFactory {
         UserInfo userInfo = iitHelper.readPrivateKey(keyFile.getAbsolutePath(), password);
         return new IITKey(userInfo);
     }
+
+    public static Key openPrivateKey(File keyFile, String password) throws IITException {
+        IITHelper iitHelper = IITHelper.getInstance();
+        UserInfo userInfo = iitHelper.readPrivateKey(keyFile.getAbsolutePath(), password);
+        return new IITKey(userInfo);
+    }
 }

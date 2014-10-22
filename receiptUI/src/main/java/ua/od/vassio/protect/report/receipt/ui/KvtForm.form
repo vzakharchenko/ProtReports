@@ -36,6 +36,16 @@
               <visible value="false"/>
             </properties>
           </component>
+          <hspacer id="655f0">
+            <constraints/>
+          </hspacer>
+          <component id="a9116" class="javax.swing.JLabel" binding="keyInfo">
+            <constraints/>
+            <properties>
+              <text value="Сертификат заканчивается через 365 дней"/>
+              <visible value="false"/>
+            </properties>
+          </component>
         </children>
       </toolbar>
       <toolbar id="be31d">

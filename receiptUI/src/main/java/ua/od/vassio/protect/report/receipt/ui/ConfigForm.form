@@ -1,143 +1,154 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ua.od.vassio.protect.report.receipt.ui.ConfigForm">
-  <grid id="27dc6" binding="config" layout-manager="GridLayoutManager" row-count="8" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="config" layout-manager="GridLayoutManager" row-count="10" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="733" height="377"/>
+      <xy x="20" y="20" width="1405" height="377"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <vspacer id="47b03">
-        <constraints>
-          <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
-            <preferred-size width="11" height="40"/>
-          </grid>
-        </constraints>
-      </vspacer>
       <component id="9da90" class="javax.swing.JLabel" binding="installPath">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Путь установки Шифратора"/>
         </properties>
       </component>
-      <component id="b0675" class="javax.swing.JTextField" binding="installIITPath">
-        <constraints>
-          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-        </constraints>
-        <properties>
-          <editable value="false"/>
-          <enabled value="true"/>
-        </properties>
-      </component>
       <component id="67c86" class="javax.swing.JLabel">
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Путь к сертификатам"/>
         </properties>
       </component>
-      <component id="32ac1" class="javax.swing.JTextField" binding="certPath">
-        <constraints>
-          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-        </constraints>
-        <properties>
-          <editable value="false"/>
-        </properties>
-      </component>
-      <component id="59ece" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Кодовая страница"/>
-        </properties>
-      </component>
       <component id="5e666" class="javax.swing.JLabel">
         <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Путь к Приватному ключу"/>
         </properties>
       </component>
+      <component id="e63a4" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Пароль к ключу(Необязательно)"/>
+        </properties>
+      </component>
+      <component id="59ece" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Кодовая страница"/>
+        </properties>
+      </component>
+      <component id="82388" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Не использовать Ключи"/>
+        </properties>
+      </component>
+      <component id="79fdb" class="javax.swing.JLabel" binding="edrpo">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="ЕДРПО/ИНН"/>
+        </properties>
+      </component>
+      <component id="96cfd" class="javax.swing.JButton" binding="setupCert">
+        <constraints>
+          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="-1" height="31"/>
+          </grid>
+        </constraints>
+        <properties>
+          <actionCommand value=""/>
+          <enabled value="true"/>
+          <label value="Скачать АЦСК сертификаты"/>
+          <text value="Скачать АЦСК сертификаты"/>
+        </properties>
+      </component>
+      <component id="51fa0" class="javax.swing.JButton" binding="owncert">
+        <constraints>
+          <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="-1" height="31"/>
+          </grid>
+        </constraints>
+        <properties>
+          <actionCommand value=""/>
+          <label value="Найти и Скачать Личный Сертификат"/>
+          <text value="Найти и Скачать Личный Сертификат"/>
+        </properties>
+      </component>
       <component id="e1024" class="javax.swing.JTextField" binding="codePage">
         <constraints>
-          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
+          <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="-1" height="23"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="c28b0" class="javax.swing.JPasswordField" binding="password">
+        <constraints>
+          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="-1" height="23"/>
           </grid>
         </constraints>
         <properties/>
       </component>
       <component id="8f329" class="javax.swing.JTextField" binding="pkPath">
         <constraints>
-          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="-1" height="23"/>
           </grid>
         </constraints>
         <properties>
           <editable value="false"/>
         </properties>
       </component>
-      <component id="e63a4" class="javax.swing.JLabel">
+      <component id="f40c6" class="javax.swing.JTextField" binding="inn">
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="b0675" class="javax.swing.JTextField" binding="installIITPath">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="485" height="23"/>
+          </grid>
         </constraints>
         <properties>
-          <text value="Пароль к ключу(Необязательно)"/>
+          <editable value="false"/>
+          <enabled value="true"/>
         </properties>
       </component>
-      <component id="c28b0" class="javax.swing.JPasswordField" binding="password">
+      <component id="32ac1" class="javax.swing.JTextField" binding="certPath">
         <constraints>
-          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
-      <toolbar id="3c93b">
-        <constraints>
-          <grid row="7" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="-1" height="20"/>
-          </grid>
-        </constraints>
-        <properties/>
-        <border type="none"/>
-        <children>
-          <hspacer id="c0903">
-            <constraints/>
-          </hspacer>
-          <component id="16a6b" class="javax.swing.JToolBar$Separator">
-            <constraints/>
-            <properties/>
-          </component>
-        </children>
-      </toolbar>
-      <component id="96cfd" class="javax.swing.JButton" binding="setupCert">
-        <constraints>
-          <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <enabled value="true"/>
-          <text value="Скачать"/>
+          <editable value="false"/>
+        </properties>
+      </component>
+      <component id="ccad0" class="javax.swing.JCheckBox" binding="notUseKey">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="(Будет показано только состояние  &quot;принят&quot; или &quot;не принят&quot;)"/>
         </properties>
       </component>
       <component id="acf47" class="javax.swing.JButton" binding="selectDirProtect">
-        <constraints>
-          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="..."/>
-        </properties>
-      </component>
-      <component id="79593" class="javax.swing.JButton" binding="btnSelectCertPath">
         <constraints>
           <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -145,55 +156,31 @@
           <text value="..."/>
         </properties>
       </component>
-      <component id="4c4d1" class="javax.swing.JButton" binding="btnkeypath">
+      <component id="79593" class="javax.swing.JButton" binding="btnSelectCertPath">
         <constraints>
-          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="..."/>
         </properties>
       </component>
-      <component id="79fdb" class="javax.swing.JLabel" binding="edrpo">
+      <component id="4c4d1" class="javax.swing.JButton" binding="btnkeypath">
         <constraints>
-          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="ЕДРПО/ИНН"/>
-        </properties>
-      </component>
-      <component id="f40c6" class="javax.swing.JTextField" binding="inn">
-        <constraints>
-          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="51fa0" class="javax.swing.JButton" binding="owncert">
-        <constraints>
-          <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Скачать"/>
+          <text value="..."/>
         </properties>
       </component>
       <component id="e06e0" class="javax.swing.JButton" binding="OK">
         <constraints>
-          <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="9" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="35" height="-1"/>
+          </grid>
         </constraints>
         <properties>
           <foreground awt-color="green"/>
-          <text value="OK"/>
-        </properties>
-      </component>
-      <component id="cd53f" class="javax.swing.JButton" binding="cancelButton" default-binding="true">
-        <constraints>
-          <grid row="7" column="3" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <foreground awt-color="red"/>
-          <horizontalAlignment value="4"/>
-          <text value="Cancel"/>
+          <text value="Сохранить"/>
         </properties>
       </component>
     </children>
