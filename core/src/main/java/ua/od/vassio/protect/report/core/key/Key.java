@@ -1,6 +1,7 @@
 package ua.od.vassio.protect.report.core.key;
 
 import ua.od.vassio.protect.report.core.exception.UnProtectIITException;
+import ua.od.vassio.protect.report.core.system.CertificateInfo;
 import ua.od.vassio.protect.report.core.system.UserInfo;
 
 /**
@@ -11,6 +12,8 @@ import ua.od.vassio.protect.report.core.system.UserInfo;
  */
 public interface Key {
     public UserInfo getUserInfo();
+
+    public CertificateInfo getUserCertificateInfo();
 
     public byte[] unprotect(byte[] bytes) throws UnProtectIITException;
 

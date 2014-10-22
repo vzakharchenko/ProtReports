@@ -113,12 +113,25 @@ public class IITHelper {
         try {
             endUser.ReadPrivateKeyFile(fileName, password);
             endUserOwnerInfo = endUser.GetPrivateKeyOwnerInfo();
-
         } catch (Exception e) {
             throw new KeyReadExceptionIITException(endUser.GetLastErrorCode(), endUser.GetLastError(), e);
         }
         validateToError();
-        return populateFromIIT(endUserOwnerInfo);
+        return populateUserInfoFromIIT(endUserOwnerInfo, UserInfo.class);
+    }
+
+    public CertificateInfo getCertificateInfo(String issuer, String serial) throws KeyReadExceptionIITException {
+        if (!isInitialized()) {
+            throw new KeyReadExceptionIITException(EndUserError.ERROR_NOT_INITIALIZED, "Library is not Initialized");
+        }
+        EndUserCertificateInfo endUserCertificateInfo;
+        try {
+            endUserCertificateInfo = endUser.GetCertificateInfo(issuer, serial);
+        } catch (Exception e) {
+            throw new KeyReadExceptionIITException(endUser.GetLastErrorCode(), endUser.GetLastError(), e);
+        }
+        validateToError();
+        return populateUserInfoFromIIT(endUserCertificateInfo, CertificateInfo.class);
     }
 
     public byte[] unprotect(byte[] data) throws UnProtectIITException {
@@ -137,26 +150,27 @@ public class IITHelper {
         }
     }
 
-    private UserInfo populateFromIIT(EndUserOwnerInfo endUserOwnerInfo) {
-        UserInfo userInfo = new UserInfo();
+    private <T> T populateUserInfoFromIIT(Object iitObj, Class<T> tClass) {
+
 
         try {
-            Field[] fields = EndUserOwnerInfo.class.getDeclaredFields();
+            T obj = tClass.newInstance();
+            Field[] fields = iitObj.getClass().getDeclaredFields();
             for (Field field : fields) {
-                Field userInfoField = UserInfo.class.getDeclaredField(field.getName());
-                if (userInfoField == null) {
-                    throw new IllegalArgumentException("Field " + field.getName() + " is not found in " + UserInfo.class);
+                Field tClassField = iitObj.getClass().getDeclaredField(field.getName());
+                if (tClassField == null) {
+                    throw new IllegalArgumentException("Field " + field.getName() + " is not found in " + tClass);
                 }
-                String methodFromName = "Get" + WordUtils.capitalize(field.getName());
-                Method methodFrom = EndUserOwnerInfo.class.getDeclaredMethod(methodFromName);
-                Method methodTo = UserInfo.class.getDeclaredMethod("set" + WordUtils.capitalize(field.getName()), field.getType());
-                Object value = methodFrom.invoke(endUserOwnerInfo);
-                methodTo.invoke(userInfo, value);
+                tClassField.setAccessible(true);
+                Object value = tClassField.get(iitObj);
+                Method methodTo = tClass.getDeclaredMethod("set" + WordUtils.capitalize(field.getName()), field.getType());
+                methodTo.invoke(obj, value);
             }
+            return obj;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-        return userInfo;
+
     }
 
     public static void saveFileStorage(FileStorage fileStorage) {

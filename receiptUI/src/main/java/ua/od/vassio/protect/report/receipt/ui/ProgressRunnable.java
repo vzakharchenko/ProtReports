@@ -37,7 +37,7 @@ public abstract class ProgressRunnable<TYPE> implements Runnable {
         }
     }
 
-    protected abstract TYPE executeLogic();
+    protected abstract TYPE executeLogic() throws Exception;
 
     @Override
     public void run() {

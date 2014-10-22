@@ -70,7 +70,7 @@
           <component id="8ed32" class="javax.swing.JButton" binding="about">
             <constraints/>
             <properties>
-              <text value="О программе"/>
+              <text value="О Ключе"/>
             </properties>
           </component>
         </children>

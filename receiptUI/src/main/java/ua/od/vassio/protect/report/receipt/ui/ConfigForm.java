@@ -25,7 +25,7 @@ import java.io.File;
  */
 public class ConfigForm extends Component implements ActionListener {
     private static ConfigForm configForm = new ConfigForm();
-    private static JFrame frame = new JFrame("ConfigForm");
+    private static JFrame frame = new JFrame("Настройки");
     private JLabel installPath;
     private JTextField installIITPath;
     private JTextField certPath;

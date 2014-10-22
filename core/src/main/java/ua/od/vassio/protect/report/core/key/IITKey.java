@@ -1,7 +1,9 @@
 package ua.od.vassio.protect.report.core.key;
 
 import ua.od.vassio.protect.report.core.exception.IITException;
+import ua.od.vassio.protect.report.core.exception.KeyReadExceptionIITException;
 import ua.od.vassio.protect.report.core.exception.UnProtectIITException;
+import ua.od.vassio.protect.report.core.system.CertificateInfo;
 import ua.od.vassio.protect.report.core.system.IITHelper;
 import ua.od.vassio.protect.report.core.system.UserInfo;
 
@@ -27,6 +29,15 @@ public class IITKey implements Key {
     @Override
     public UserInfo getUserInfo() {
         return userInfo;
+    }
+
+    @Override
+    public CertificateInfo getUserCertificateInfo() {
+        try {
+            return iitHelper.getCertificateInfo(userInfo.getIssuer(), userInfo.getSerial());
+        } catch (KeyReadExceptionIITException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

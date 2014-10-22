@@ -222,9 +222,22 @@ public class KvtForm extends Component {
                 }
             }
         });
+
+        about.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setEnabled(false);
+                try {
+                    AboutKey.showGUI();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    DialogMessages.showErrorPane("Ошибка открытия О программе", ex.getMessage());
+                } finally {
+                    frame.setEnabled(true);
+                }
+            }
+        });
     }
-
-
 
 
 }

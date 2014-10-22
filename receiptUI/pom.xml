@@ -29,6 +29,11 @@
             <artifactId>cert</artifactId>
             <version>${version}</version>
         </dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.2</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
