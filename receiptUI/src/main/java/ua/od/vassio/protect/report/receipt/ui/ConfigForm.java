@@ -75,7 +75,9 @@ public class ConfigForm extends Component implements ActionListener {
                     return storage;
                 }
             });
-
+            if (storage == null) {
+                throw new RuntimeException("Ошибка рри Загрузке информациии из Хранилища");
+            }
             configForm.certPath.setText(Config.load(Configs.CERT_PATH, storage.getFileStorage().getPath()));
         } catch (Exception e) {
             throw new RuntimeException(e);

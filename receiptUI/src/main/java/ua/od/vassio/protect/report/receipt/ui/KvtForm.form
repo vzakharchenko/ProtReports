@@ -17,7 +17,7 @@
         </constraints>
         <properties>
           <editable value="false"/>
-          <text value="Нажмите расшифровать чтобы прочитать сообщение"/>
+          <text value=""/>
         </properties>
       </component>
       <toolbar id="8a462">

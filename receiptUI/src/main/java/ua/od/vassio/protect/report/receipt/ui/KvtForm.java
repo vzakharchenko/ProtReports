@@ -13,9 +13,14 @@ import ua.od.vassio.protect.report.receipt.ui.config.Configs;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -92,9 +97,11 @@ public class KvtForm extends Component {
             }
             showReceiptModel(receiptModel);
             currentFile = file;
+            unprotect.setVisible(!useKey);
             return useKey;
         } catch (Exception ex) {
             DialogMessages.showErrorPane("Ошибка чтения файла", ex.getMessage());
+            unprotect.setVisible(false);
             return false;
         }
     }
@@ -148,7 +155,7 @@ public class KvtForm extends Component {
 
     protected void init() {
         if (defaultFileName != null) {
-            unprotect.setVisible(!openFile(new File(defaultFileName)));
+            openFile(new File(defaultFileName));
         } else {
             kvtForm.email.setText("");
             kvtForm.kvtNUMValue.setText("");
@@ -167,7 +174,6 @@ public class KvtForm extends Component {
                     File file = fc.getSelectedFile();
                     if (file.exists()) {
                         boolean useKey = openFile(file);
-                        unprotect.setVisible(!useKey);
                         DialogMessages.showPane("Файл успешно прочитан", useKey ? "Файл успешно расшифрован" : "Файл не расшифрован", useKey ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.WARNING_MESSAGE);
                     }
                 }
@@ -234,6 +240,22 @@ public class KvtForm extends Component {
                     DialogMessages.showErrorPane("Ошибка открытия О программе", ex.getMessage());
                 } finally {
                     frame.setEnabled(true);
+                }
+            }
+        });
+        message.setDropTarget(new DropTarget() {
+            public synchronized void drop(DropTargetDropEvent evt) {
+                try {
+                    evt.acceptDrop(DnDConstants.ACTION_COPY);
+                    List<File> droppedFiles = (List<File>)
+                            evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+                    for (File file : droppedFiles) {
+                        boolean useKey = openFile(file);
+                        DialogMessages.showPane("Файл успешно прочитан", useKey ? "Файл успешно расшифрован" : "Файл не расшифрован", useKey ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.WARNING_MESSAGE);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    DialogMessages.showErrorPane("Ошибка при перетаскивании", ex.getMessage());
                 }
             }
         });
