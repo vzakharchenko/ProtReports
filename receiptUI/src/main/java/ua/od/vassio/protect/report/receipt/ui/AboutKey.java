@@ -72,7 +72,7 @@ public class AboutKey extends Component implements ActionListener {
                     }
 
                 }
-            }, Key.class);
+            });
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при считывании ключа" + e.getMessage(), e);
         }

@@ -138,7 +138,7 @@ public class KvtForm extends Component {
                         return null;
                     }
                 }
-            }, ReceiptModel.class);
+            });
         } catch (InterruptedException e) {
             DialogMessages.showErrorPane("Ошибка открытия файла", e.getMessage());
             return null;
@@ -148,7 +148,7 @@ public class KvtForm extends Component {
 
     protected void init() {
         if (defaultFileName != null) {
-            unprotect.setEnabled(!openFile(new File(defaultFileName)));
+            unprotect.setVisible(!openFile(new File(defaultFileName)));
         } else {
             kvtForm.email.setText("");
             kvtForm.kvtNUMValue.setText("");
@@ -167,7 +167,7 @@ public class KvtForm extends Component {
                     File file = fc.getSelectedFile();
                     if (file.exists()) {
                         boolean useKey = openFile(file);
-                        unprotect.setEnabled(!useKey);
+                        unprotect.setVisible(!useKey);
                         DialogMessages.showPane("Файл успешно прочитан", useKey ? "Файл успешно расшифрован" : "Файл не расшифрован", useKey ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.WARNING_MESSAGE);
                     }
                 }
@@ -212,7 +212,7 @@ public class KvtForm extends Component {
                         ReceiptModel receiptModel = decryptFile(installPath, currentFile, keyPath, keyPassword);
                         if (receiptModel != null) {
                             showReceiptModel(receiptModel);
-                            unprotect.setEnabled(false);
+                            unprotect.setVisible(false);
                         }
 
                     } catch (Exception ex) {

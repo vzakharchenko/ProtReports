@@ -26,7 +26,7 @@ public class DialogMessages {
         dialog.setVisible(true);
     }
 
-    public static <TYPE> TYPE showProgressPane(Frame parentFrame, String title, String msg, int minValue, int maxValue, ProgressRunnable<TYPE> progressRunnable, Class<TYPE> type) throws InterruptedException {
+    public static <TYPE> TYPE showProgressPane(Frame parentFrame, String title, String msg, int minValue, int maxValue, ProgressRunnable<TYPE> progressRunnable) throws InterruptedException {
         final JDialog dlg = new JDialog(parentFrame, title, true);
         JProgressBar dpb = new JProgressBar(minValue, maxValue);
         dlg.add(BorderLayout.CENTER, dpb);

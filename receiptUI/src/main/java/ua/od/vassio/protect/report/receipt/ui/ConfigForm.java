@@ -4,7 +4,6 @@ import com.iit.certificateAuthority.endUser.libraries.signJava.EndUserResourceEx
 import org.apache.commons.lang3.StringUtils;
 import ua.od.vassio.protect.report.cert.acsk.ACSKDownloaderHelper;
 import ua.od.vassio.protect.report.cert.own.AcskiddOwnCertFactory;
-import ua.od.vassio.protect.report.core.exception.IITException;
 import ua.od.vassio.protect.report.core.system.IITHelper;
 import ua.od.vassio.protect.report.core.system.storage.Storage;
 import ua.od.vassio.protect.report.core.system.storage.StorageFactory;
@@ -65,10 +64,20 @@ public class ConfigForm extends Component implements ActionListener {
     private static void init() {
         configForm.installIITPath.setText(Config.load(Configs.INSTALL_PATH, EndUserResourceExtractor.GetInstallPath()));
         try {
-            IITHelper.getInstance().reInstall(configForm.installIITPath.getText());
-            Storage storage = StorageFactory.loadStorage();
+            Storage storage = DialogMessages.showProgressPane(frame, "Загружаем информациию о Хранилище", "Загружаем информациию о Хранилище...", 0, 5, new ProgressRunnable<Storage>() {
+                @Override
+                protected Storage executeLogic() throws Exception {
+                    increment();
+                    IITHelper.getInstance().reInstall(configForm.installIITPath.getText());
+                    increment(2);
+                    Storage storage = StorageFactory.loadStorage();
+                    increment(2);
+                    return storage;
+                }
+            });
+
             configForm.certPath.setText(Config.load(Configs.CERT_PATH, storage.getFileStorage().getPath()));
-        } catch (IITException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
@@ -168,9 +177,17 @@ public class ConfigForm extends Component implements ActionListener {
         Config.save(Configs.PRIVATEKEY_PASSWORD, new String(configForm.password.getPassword()));
         Config.save(Configs.INN, configForm.inn.getText());
         try {
-            StorageFactory.saveStorage(StorageFactory.buildDefaultStorage(configForm.certPath.getText()));
-        } catch (IITException e1) {
-            throw new RuntimeException(e1);
+            DialogMessages.showProgressPane(frame, "Сохраняем Хранилище", "Сохраняем информациию о Хранилище...", 0, 5, new ProgressRunnable<Object>() {
+
+                @Override
+                protected Object executeLogic() throws Exception {
+                    StorageFactory.saveStorage(StorageFactory.buildDefaultStorage(configForm.certPath.getText()));
+                    return null;
+                }
+            });
+        } catch (Exception e1) {
+            DialogMessages.showErrorPane("Сохранение параметров не получилось", e1.getMessage());
+            return;
         }
         frame.setVisible(false);
     }

@@ -42,6 +42,9 @@ public abstract class ProgressRunnable<TYPE> implements Runnable {
     @Override
     public void run() {
         try {
+            while (!dialog.isVisible()) {
+                Thread.sleep(10);
+            }
             progressBar.setValue(progressBar.getMinimum());
 
             value = executeLogic();
