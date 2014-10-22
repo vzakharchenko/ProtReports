@@ -2,9 +2,11 @@ package ua.od.vassio.protect.report.receipt.ui;
 
 import com.iit.certificateAuthority.endUser.libraries.signJava.EndUserResourceExtractor;
 import org.apache.commons.lang3.StringUtils;
+import ua.od.vassio.protect.report.core.exception.IITException;
 import ua.od.vassio.protect.report.core.key.Key;
 import ua.od.vassio.protect.report.core.key.KeyFactory;
 import ua.od.vassio.protect.report.receipt.ReceiptReader;
+import ua.od.vassio.protect.report.receipt.exception.ReceiptReadException;
 import ua.od.vassio.protect.report.receipt.model.ReceiptModel;
 import ua.od.vassio.protect.report.receipt.ui.config.Config;
 import ua.od.vassio.protect.report.receipt.ui.config.Configs;
@@ -37,6 +39,7 @@ public class KvtForm extends Component {
     private JButton config;
     private JButton about;
     private JButton unprotect;
+    private File currentFile;
     private static JFrame frame = new JFrame("Квитанция");
 
     public static void main(String[] args) {
@@ -57,12 +60,14 @@ public class KvtForm extends Component {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         kvtForm.init();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
     }
 
     public boolean openFile(File file) {
         try {
+
             boolean useKey = false;
             String keyPath = Config.load(Configs.PRIVATEKEY_PATH);
             ReceiptModel receiptModel;
@@ -72,21 +77,24 @@ public class KvtForm extends Component {
                 String installPath = Config.load(Configs.INSTALL_PATH, EndUserResourceExtractor.GetInstallPath());
                 String keyPassword = Config.load(Configs.PRIVATEKEY_PASSWORD);
                 if (StringUtils.isEmpty(keyPassword)) {
-                    keyPassword = showPasswordPane("Пароль к ключу", "Введите пароль к ключу");
+                    keyPassword = DialogMessages.showPasswordPane("Пароль к ключу", "Введите пароль к ключу");
                 }
                 if (StringUtils.isEmpty(keyPassword)) {
                     receiptModel = ReceiptReader.readOnlyEncodePartFile(file);
                 } else {
-                    Key key = KeyFactory.openPrivateKey(installPath, new File(keyPath), keyPassword);
-                    String codepage = Config.load(Configs.CODEPAGE, "windows-1251");
-                    receiptModel = ReceiptReader.readReceiptFile(codepage, key, file);
-                    useKey = true;
+                    receiptModel = decryptFile(installPath, file, keyPath, keyPassword);
+                    useKey = receiptModel != null;
+                    if (!useKey) {
+                        receiptModel = ReceiptReader.readOnlyEncodePartFile(file);
+                    }
+
                 }
             }
             showReceiptModel(receiptModel);
+            currentFile = file;
             return useKey;
         } catch (Exception ex) {
-            showErrorPane("error", ex.getMessage());
+            DialogMessages.showErrorPane("Ошибка чтения файла", ex.getMessage());
             return false;
         }
     }
@@ -106,9 +114,41 @@ public class KvtForm extends Component {
 
     }
 
+    public ReceiptModel decryptFile(final String installPath, final File file, final String keyPath, final String keyPassword) {
+        try {
+            return DialogMessages.showProgressPane(frame, "Подождите файл открывается", "Подождите файл открывается...", 0, 6, new ProgressRunnable<ReceiptModel>() {
+                @Override
+                protected ReceiptModel executeLogic() {
+                    try {
+                        increment();
+                        Key key = KeyFactory.openPrivateKey(installPath, new File(keyPath), keyPassword);
+                        increment(3);
+                        String codepage = Config.load(Configs.CODEPAGE, "windows-1251");
+                        increment(1);
+                        ReceiptModel receiptModel = ReceiptReader.readReceiptFile(codepage, key, file);
+                        increment(2);
+                        return receiptModel;
+                    } catch (IITException e) {
+                        e.printStackTrace();
+                        DialogMessages.showErrorPane("Ошибка чтения файла", e.getMessage());
+                        return null;
+                    } catch (ReceiptReadException e) {
+                        e.printStackTrace();
+                        DialogMessages.showErrorPane("Ошибка расшифровки файла", e.getMessage());
+                        return null;
+                    }
+                }
+            }, ReceiptModel.class);
+        } catch (InterruptedException e) {
+            DialogMessages.showErrorPane("Ошибка открытия файла", e.getMessage());
+            return null;
+        }
+
+    }
+
     protected void init() {
         if (defaultFileName != null) {
-            openFile(new File(defaultFileName));
+            unprotect.setEnabled(!openFile(new File(defaultFileName)));
         } else {
             kvtForm.email.setText("");
             kvtForm.kvtNUMValue.setText("");
@@ -119,12 +159,16 @@ public class KvtForm extends Component {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fc = new JFileChooser();
+                if (currentFile != null) {
+                    fc.setCurrentDirectory(currentFile);
+                }
                 int returnVal = fc.showOpenDialog(KvtForm.this);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = fc.getSelectedFile();
                     if (file.exists()) {
                         boolean useKey = openFile(file);
-                        showPane("Файл успешно прочитан", useKey ? "Файл успешно расшифрован" : "Файл не Распаковывался", useKey ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.WARNING_MESSAGE);
+                        unprotect.setEnabled(!useKey);
+                        DialogMessages.showPane("Файл успешно прочитан", useKey ? "Файл успешно расшифрован" : "Файл не расшифрован", useKey ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.WARNING_MESSAGE);
                     }
                 }
             }
@@ -132,38 +176,55 @@ public class KvtForm extends Component {
         config.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ConfigForm.showGUI();
+                frame.setEnabled(false);
+                try {
+                    ConfigForm.showGUI();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    DialogMessages.showErrorPane("Ошибка открытия Параметров", ex.getMessage());
+                } finally {
+                    frame.setEnabled(true);
+                }
+            }
+        });
+        unprotect.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String keyPath = Config.load(Configs.PRIVATEKEY_PATH);
+                if (currentFile == null) {
+                    DialogMessages.showInfoPane("Ошибка", "Откройте сначала файл ");
+                    return;
+                }
+                if (StringUtils.isEmpty(keyPath) || !new File(keyPath).exists()) {
+                    DialogMessages.showErrorPane("Ключ не найден", "Укажите путь к ключу и установите сертификат");
+                    config.doClick();
+                    return;
+                }
+                String installPath = Config.load(Configs.INSTALL_PATH, EndUserResourceExtractor.GetInstallPath());
+                String keyPassword = Config.load(Configs.PRIVATEKEY_PASSWORD);
+                if (StringUtils.isEmpty(keyPassword)) {
+                    keyPassword = DialogMessages.showPasswordPane("Пароль к ключу", "Введите пароль к ключу");
+                }
+                if (StringUtils.isEmpty(keyPassword)) {
+
+                } else {
+                    try {
+                        ReceiptModel receiptModel = decryptFile(installPath, currentFile, keyPath, keyPassword);
+                        if (receiptModel != null) {
+                            showReceiptModel(receiptModel);
+                            unprotect.setEnabled(false);
+                        }
+
+                    } catch (Exception ex) {
+                        DialogMessages.showErrorPane("error", ex.getMessage());
+                        return;
+                    }
+                }
             }
         });
     }
 
-    protected void showErrorPane(String title, String msg) {
-        showPane(title, msg, JOptionPane.ERROR_MESSAGE);
-    }
 
-    protected void showPane(String title, String msg, int type) {
-        JOptionPane pane = new JOptionPane(msg, type);
-        JDialog dialog = pane.createDialog(title);
-        dialog.setAlwaysOnTop(true);
-        dialog.setVisible(true);
-    }
-
-    protected String showPasswordPane(String title, String msg) {
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel("Enter a password:");
-        JPasswordField pass = new JPasswordField(10);
-        panel.add(label);
-        panel.add(pass);
-        String[] options = new String[]{"OK", "Cancel"};
-        int option = JOptionPane.showOptionDialog(null, panel, "The title",
-                JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
-                null, options, options[1]);
-        if (option == JOptionPane.OK_OPTION) // pressing OK button
-        {
-            return new String(pass.getPassword());
-        }
-        return null;
-    }
 
 
 }

@@ -36,7 +36,7 @@ public abstract class OwnCertDownloader implements CertDownloader {
            if (CollectionUtils.isNotEmpty(foundCert)){
                for (URL url:foundCert){
                  String fileName=Downloader.getName(url,cookie);
-                 Downloader.downloadFileToDisk(url,fileName,pathToSave);
+                   Downloader.downloadFileToDisk(url, fileName, pathToSave, cookie);
                }
            } else {
                throw new OwnCertIsNotFound("Own certificate is Not Found ");

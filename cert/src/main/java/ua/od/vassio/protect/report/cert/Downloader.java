@@ -89,6 +89,21 @@ public class Downloader {
         FileUtils.copyURLToFile(file, new File(directory, fileName));
     }
 
+    public static void downloadFileToDisk(URL file, String fileName, File directory, String cookie) throws IOException {
+        FileUtils.copyURLToFile(file, new File(directory, fileName));
+        HttpURLConnection urlConnection = (HttpURLConnection) file.openConnection();
+        try {
+            urlConnection.setConnectTimeout(10000);
+            urlConnection.setReadTimeout(10000);
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestProperty(HEADERNAME_COOKIE, cookie);
+            OutputStream outputStream = new FileOutputStream(new File(directory, fileName));
+            IOUtils.copy(urlConnection.getInputStream(), outputStream);
+        } finally {
+            urlConnection.disconnect();
+        }
+    }
+
     public static String getCookie(URL page) throws IOException {
         URLConnection urlConnection = page.openConnection();
         urlConnection.setConnectTimeout(10000);

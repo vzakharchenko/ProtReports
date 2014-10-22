@@ -24,6 +24,11 @@
             <artifactId>receipt</artifactId>
             <version>${version}</version>
         </dependency>
+        <dependency>
+            <groupId>ua.od.vassio.protectReports</groupId>
+            <artifactId>cert</artifactId>
+            <version>${version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
